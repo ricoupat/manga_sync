@@ -1,17 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
-const dataBaseEndpoints = require('./routes/dataBaseEndpoints');
+const dataBaseEndpoints = require('./routes/apiBddRoutes');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 5050;
 const URL = process.env.MONGO_URI
 const app = express();
+const baseUrl = '/members';
 
 app.use(cors());
 app.use(express.json());
-app.use("/members", dataBaseEndpoints);
+app.use(baseUrl, dataBaseEndpoints);
 
 mongoose
     .connect(URL, {
@@ -26,5 +26,5 @@ mongoose
 
 // start the Express server
 app.listen(PORT, () => {
-    console.log(`Server listening on at http://localhost:${PORT}`);
+    console.log(`Server listening on at http://localhost:${PORT}${baseUrl}`);
 });

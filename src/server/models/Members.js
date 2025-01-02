@@ -4,6 +4,7 @@ const MembersSchema = new Schema({
     surname: {
         type: String,
         required: true,
+        unique: true,
     },
     email: {
         type: String,
@@ -12,6 +13,7 @@ const MembersSchema = new Schema({
     login: {
         type: String,
         required: true,
+        unique: true,
     },
     password: {
         type: String,
