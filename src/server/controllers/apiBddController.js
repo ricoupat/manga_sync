@@ -1,5 +1,6 @@
 const service = require('../services/apiBddService');
 const bcryptjs = require('bcryptjs');
+const loginException = require("../Exceptions/loginException");
 
 class apiBddController {
     async getAllMembers(req, res) {
@@ -15,14 +16,18 @@ class apiBddController {
         try {
             const { login, password } = req.body;
             const member = await service.getMemberByLogin(login);
-
             const isPasswordValid = await bcryptjs.compare(password, member.password);
             if (!isPasswordValid) {
                 res.status(401).send({ isPasswordValid: false });
             }
             res.status(200).send({ isPasswordValid: true });
         } catch (error) {
-            res.status(500).send({message: error.message})
+            if (error.name === "loginException") {
+                res.status(501).send(error.message)
+            }
+            else {
+                res.status(500).send({message: error.message})
+            }
         }
     }
 

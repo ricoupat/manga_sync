@@ -25,12 +25,13 @@ export default {
           this.$store.dispatch('setAuthenticated', true);
           this.$router.push({ path: "/" });
         }
-        else {
+      } catch (error) {
+        if (error.status === 501) {
           alert('Invalid credentials');
         }
-      } catch (error) {
-        alert('Error during login:', error);
-        alert('An error occurred while logging in');
+        else {
+          alert('An error occurred while logging in');
+        }
       }
     }
   },

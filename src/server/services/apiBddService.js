@@ -6,9 +6,11 @@ class apiBddService {
     }
 
     async getMemberByLogin(login) {
-        const member = await Repository.findByLogin({ surname: login });
-        if (!member) throw new Error("Member not found");
-        return member;
+        try {
+            return await Repository.findByLogin({ surname: login });
+        } catch (error) {
+            throw error;
+        }
     }
 
     async createMember(data) {

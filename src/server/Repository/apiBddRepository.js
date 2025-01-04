@@ -1,5 +1,6 @@
 const Member = require("../models/Members");
 const bcrypt = require("bcryptjs");
+const loginException = require("../Exceptions/loginException");
 
 class apiBddRepository {
     async findAll() {
@@ -7,7 +8,18 @@ class apiBddRepository {
     }
 
     async findByLogin(login) {
-        return Member.findOne(login);
+
+        try {
+            const member = await Member.findOne(login);
+            if (!member) {
+                console.error("Could not find member with login", login);
+                throw new loginException("Member not found");
+            }
+            return member;
+        } catch (error) {
+            throw error;
+        }
+
     }
 
     async create(data) {
