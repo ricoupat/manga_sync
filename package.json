@@ -10,5 +10,8 @@
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
+  },
+  "dependencies": {
+    "vue-router": "^4.5.0"
   }
 }

@@ -1,25 +1,32 @@
-const Employee = require("../models/Members");
+const Member = require("../models/Members");
+const bcrypt = require("bcryptjs");
 
 class apiBddRepository {
     async findAll() {
-        return Employee.find();
+        return Member.find();
     }
 
-    async findById(id) {
-        return Employee.findById(id);
+    async findByLogin(login) {
+        return Member.findOne(login);
     }
 
     async create(data) {
-        const employee = new Employee(data);
-        return await employee.save();
+        data.password = await bcrypt.hash(data.password, 10);
+        const newMember = new Member(data);
+        try {
+            await newMember.save();
+            return newMember;
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async update(id, data) {
-        return Employee.findByIdAndUpdate(id, data, { new: true });
+        return Member.findByIdAndUpdate(id, data, { new: true });
     }
 
     async delete(id) {
-        return Employee.findByIdAndDelete(id);
+        return Member.findByIdAndDelete(id);
     }
 }
 

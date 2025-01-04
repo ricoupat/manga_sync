@@ -5,10 +5,10 @@ class apiBddService {
         return await Repository.findAll();
     }
 
-    async getMemberById(id) {
-        const employee = await Repository.findById(id);
-        if (!employee) throw new Error("Employee not found");
-        return employee;
+    async getMemberByLogin(login) {
+        const member = await Repository.findByLogin({ surname: login });
+        if (!member) throw new Error("Member not found");
+        return member;
     }
 
     async createMember(data) {
@@ -16,15 +16,15 @@ class apiBddService {
     }
 
     async updateMember(id, data) {
-        const updatedEmployee = await Repository.update(id, data);
-        if (!updatedEmployee) throw new Error("Employee not found");
-        return updatedEmployee;
+        const updatedMember = await Repository.update(id, data);
+        if (!updatedMember) throw new Error("Member not found");
+        return updatedMember;
     }
 
     async deleteMember(id) {
-        const deletedEmployee = await Repository.delete(id);
-        if (!deletedEmployee) throw new Error("Employee not found");
-        return deletedEmployee;
+        const deletedMember = await Repository.delete(id);
+        if (!deletedMember) throw new Error("Member not found");
+        return deletedMember;
     }
 }
 

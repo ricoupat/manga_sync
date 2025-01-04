@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const controller = require("../controllers/apiBddController");
+const bbdController = require("../controllers/apiBddController");
 
-router.get("/", controller.getAllMembers);
-router.get("/:id", controller.getMemberById);
-router.post("/", controller.createMember);
-router.patch("/:id", controller.updateMember);
-router.delete("/:id", controller.deleteMember);
+router.get("/", bbdController.getAllMembers);
+router.post("/login", bbdController.checkAuthentication);
+router.post("/", bbdController.createMember);
+router.patch("/:id", bbdController.updateMember);
+router.delete("/:id", bbdController.deleteMember);
 
 module.exports = router;

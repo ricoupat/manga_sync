@@ -1,4 +1,5 @@
 const service = require('../services/apiBddService');
+const bcryptjs = require('bcryptjs');
 
 class apiBddController {
     async getAllMembers(req, res) {
@@ -10,10 +11,16 @@ class apiBddController {
         }
     }
 
-    async getMemberById(req, res) {
+    async checkAuthentication(req, res) {
         try {
-            const member = await service.getMemberById(req.params.id);
-            res.status(200).send(member);
+            const { login, password } = req.body;
+            const member = await service.getMemberByLogin(login);
+
+            const isPasswordValid = await bcryptjs.compare(password, member.password);
+            if (!isPasswordValid) {
+                res.status(401).send({ isPasswordValid: false });
+            }
+            res.status(200).send({ isPasswordValid: true });
         } catch (error) {
             res.status(500).send({message: error.message})
         }
@@ -23,8 +30,10 @@ class apiBddController {
         try {
             const member = await service.createMember(req.body);
             res.status(201).json(member);
+            console.log("added member with ", member);
         } catch (error) {
             res.status(500).json({ message: error.message });
+            console.log("Error adding member ");
         }
     }
 
