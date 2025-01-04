@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+import { mapActions } from 'vuex';
 
 export default {
   name: "LoginPage",
@@ -15,6 +16,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['triggerAlert']),
     async tryConnection() {
       try {
         const response = await axios.post(`/api/members/login`, {
@@ -26,11 +28,11 @@ export default {
           this.$router.push({ path: "/" });
         }
       } catch (error) {
-        if (error.status === 501) {
-          alert('Invalid credentials');
+        if (error.status === 401) {
+          await this.triggerAlert({message: 'Login failed. Please check your login and password', type: 'error'});
         }
         else {
-          alert('An error occurred while logging in');
+          await this.triggerAlert({message: 'An error occurred while logging in', type: 'error'});
         }
       }
     }
