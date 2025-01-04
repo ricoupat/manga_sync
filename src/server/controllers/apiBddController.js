@@ -20,10 +20,12 @@ class apiBddController {
             if (!isPasswordValid) {
                 res.status(401).send({ isPasswordValid: false });
             }
-            res.status(200).send({ isPasswordValid: true });
+            else {
+                res.status(200).send({ isPasswordValid: true });
+            }
         } catch (error) {
             if (error.name === "loginException") {
-                res.status(501).send(error.message)
+                res.status(401).send(error.message)
             }
             else {
                 res.status(500).send({message: error.message})
@@ -45,7 +47,7 @@ class apiBddController {
     async updateMember(req, res) {
         try {
             const member = await service.updateMember(req.params.id, req.body);
-            res.status(202).json(member);
+            res.status(200).json(member);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -54,7 +56,7 @@ class apiBddController {
     async deleteMember(req, res) {
         try {
             const member = await service.deleteMember(req.params.id);
-            res.status(203).json(member);
+            res.status(200).json(member);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
