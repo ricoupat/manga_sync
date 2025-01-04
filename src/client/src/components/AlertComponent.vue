@@ -33,17 +33,16 @@ export default {
 .alert-container {
   font-weight: bold;
   position: fixed;
-  top: 55px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 7px;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-  max-width: 500px;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 
