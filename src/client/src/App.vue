@@ -1,15 +1,24 @@
 <template>
+  <AlertComponent v-if="alert.visible" :type="alert.type" :message="alert.message" :dismissible="true"/>
   <DefaultLayout/>
 </template>
 
 <script>
 import DefaultLayout from "@/layouts/DefaultLayout.vue";
+import AlertComponent from "@/components/AlertComponent.vue";
+import { mapState } from "vuex";
 
 export default {
   name: 'App',
   components: {
-    DefaultLayout
-  }
+    DefaultLayout,
+    AlertComponent,
+  },
+  computed: {
+    ...mapState({
+      alert: state => state.alert
+    }),
+  },
 }
 </script>
 
@@ -21,7 +30,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   display: flex;
-  flex-direction: column; /* Alignement des éléments du conteneur en colonne */
+  flex-direction: column;
   min-height: 100vh;
   background-color: white;
 }
