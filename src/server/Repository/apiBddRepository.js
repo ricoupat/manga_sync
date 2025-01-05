@@ -12,7 +12,6 @@ class apiBddRepository {
         try {
             const member = await Member.findOne(login);
             if (!member) {
-                console.error("Could not find member with login", login);
                 throw new loginException("Member not found");
             }
             return member;
@@ -29,7 +28,7 @@ class apiBddRepository {
             await newMember.save();
             return newMember;
         } catch (error) {
-            console.log(error);
+            throw error;
         }
     }
 

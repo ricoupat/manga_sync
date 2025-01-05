@@ -1,6 +1,5 @@
 const service = require('../services/apiBddService');
-const bcryptjs = require('bcryptjs');
-const loginException = require("../Exceptions/loginException");
+const registrationException = require("../Exceptions/registrationException");
 
 class apiBddController {
     async getAllMembers(req, res) {
@@ -15,20 +14,16 @@ class apiBddController {
     async checkAuthentication(req, res) {
         try {
             const { login, password } = req.body;
-            const member = await service.getMemberByLogin(login);
-            const isPasswordValid = await bcryptjs.compare(password, member.password);
-            if (!isPasswordValid) {
-                res.status(401).send({ isPasswordValid: false });
-            }
-            else {
-                res.status(200).send({ isPasswordValid: true });
-            }
+            await service.getMemberByLogin(login, password);
+
+            res.status(200).send({ isPasswordValid: true });
+
         } catch (error) {
             if (error.name === "loginException") {
                 res.status(401).send(error.message)
             }
             else {
-                res.status(500).send({message: error.message})
+                res.status(500).send({ error: "ServerError", message: "An unexpected error occurred" })
             }
         }
     }
@@ -37,10 +32,13 @@ class apiBddController {
         try {
             const member = await service.createMember(req.body);
             res.status(201).json(member);
-            console.log("added member with ", member);
         } catch (error) {
-            res.status(500).json({ message: error.message });
-            console.log("Error adding member ");
+            if (error instanceof registrationException) {
+                res.status(400).send({ error: "ValidationError", details: error.errors })
+            }
+            else {
+                res.status(500).json({ error: "ServerError", message: "An unexpected error occurred" });
+            }
         }
     }
 

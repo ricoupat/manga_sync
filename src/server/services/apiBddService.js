@@ -1,20 +1,55 @@
 const Repository = require("../Repository/apiBddRepository");
+const formValidator = require("../Security/formValidator");
+const loginException = require("../Exceptions/loginException");
+const registrationException = require("../Exceptions/registrationException");
+const passwordSecurity = require("../Security/passwordSecurity");
+
 
 class apiBddService {
     async getAllMembers() {
         return await Repository.findAll();
     }
 
-    async getMemberByLogin(login) {
+    async getMemberByLogin(login, password) {
         try {
-            return await Repository.findByLogin({ surname: login });
+            const { saneLogin, sanePassword } = formValidator().sanitizeFields({login, password});
+            const member = await Repository.findByLogin({ surname: saneLogin });
+
+            if (!member) {
+                throw new loginException("Invalid login credentials");
+            }
+
+            const isPasswordValid = await passwordSecurity.comparePasswords(sanePassword, member.password);
+
+            if (!isPasswordValid) {
+                throw new loginException("Invalid login credentials");
+            }
+
+            return member;
+
         } catch (error) {
             throw error;
         }
     }
 
     async createMember(data) {
-        return await Repository.create(data);
+        const { login, email, password, confPassword } = data;
+        const validator = new formValidator();
+
+        const {valid, errors} = validator.checkRegistration(login, email, password, confPassword);
+
+        if (!valid) {
+            throw new registrationException(errors);
+        }
+
+        const newData = validator.sanitizeFields({ login, email, password })
+        newData.password = await passwordSecurity.hashPassword(newData.password);
+
+        try {
+            return await Repository.create(newData);
+        } catch (error) {
+            throw error;
+        }
     }
 
     async updateMember(id, data) {
