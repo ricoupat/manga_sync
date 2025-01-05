@@ -13,7 +13,7 @@ class apiBddService {
     async getMemberByLogin(login, password) {
         try {
             const saneFields = new formValidator().sanitizeFields({login, password});
-            const member = await Repository.findByLogin({ surname: saneFields.login });
+            const member = await Repository.findByLogin(saneFields.login);
             if (!member) {
                 throw new loginException("Invalid login credentials");
             }
@@ -36,11 +36,12 @@ class apiBddService {
         const validator = new formValidator();
 
         const errors = validator.checkRegistration(login, email, password, confPassword);
-        const existingMember = await Repository.findByLogin(validator.sanitizeFields({login}));
+        const existingMember = await Repository.findByLogin(validator.sanitizeField(login));
 
-        if (!existingMember) {
+        if (existingMember) {
             errors.login = "surname already used";
         }
+
         if (Object.keys(errors).length > 0 ) {
             throw new registrationException(errors);
         }

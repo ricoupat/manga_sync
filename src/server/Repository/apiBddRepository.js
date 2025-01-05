@@ -7,7 +7,7 @@ class apiBddRepository {
 
     async findByLogin(login) {
         try {
-            return await Member.findOne(login);
+            return await Member.findOne({surname: login});
         } catch (error) {
             throw error;
         }
