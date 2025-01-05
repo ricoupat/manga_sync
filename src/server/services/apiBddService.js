@@ -12,14 +12,13 @@ class apiBddService {
 
     async getMemberByLogin(login, password) {
         try {
-            const { saneLogin, sanePassword } = formValidator().sanitizeFields({login, password});
-            const member = await Repository.findByLogin({ surname: saneLogin });
-
+            const saneFields = new formValidator().sanitizeFields({login, password});
+            const member = await Repository.findByLogin({ surname: saneFields.login });
             if (!member) {
                 throw new loginException("Invalid login credentials");
             }
 
-            const isPasswordValid = await passwordSecurity.comparePasswords(sanePassword, member.password);
+            const isPasswordValid = await passwordSecurity.comparePasswords(saneFields.password, member.password);
 
             if (!isPasswordValid) {
                 throw new loginException("Invalid login credentials");
@@ -41,8 +40,7 @@ class apiBddService {
         if (!valid) {
             throw new registrationException(errors);
         }
-
-        const newData = validator.sanitizeFields({ login, email, password })
+        const newData = validator.sanitizeFields({ surname: login, email, password })
         newData.password = await passwordSecurity.hashPassword(newData.password);
 
         try {

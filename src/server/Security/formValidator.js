@@ -22,10 +22,9 @@ class formValidator {
 
     sanitizeFields(fields) {
         let res = {};
-        for (const field of fields) {
-            res.add = this.sanitizeField(field);
+        for (const key of Object.keys(fields)) {
+            res[key] = this.sanitizeField(fields[key]);
         }
-
         return res;
     }
 

@@ -1,5 +1,4 @@
 const Member = require("../models/Members");
-const bcrypt = require("bcryptjs");
 const loginException = require("../Exceptions/loginException");
 
 class apiBddRepository {
@@ -22,7 +21,6 @@ class apiBddRepository {
     }
 
     async create(data) {
-        data.password = await bcrypt.hash(data.password, 10);
         const newMember = new Member(data);
         try {
             await newMember.save();
