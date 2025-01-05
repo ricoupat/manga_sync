@@ -1,5 +1,4 @@
 const Member = require("../models/Members");
-const loginException = require("../Exceptions/loginException");
 
 class apiBddRepository {
     async findAll() {
