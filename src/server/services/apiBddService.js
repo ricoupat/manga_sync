@@ -3,6 +3,7 @@ const formValidator = require("../Security/formValidator");
 const loginException = require("../Exceptions/loginException");
 const registrationException = require("../Exceptions/registrationException");
 const passwordSecurity = require("../Security/passwordSecurity");
+const emailValidation = require("../Exceptions/registrationException");
 
 
 class apiBddService {
@@ -36,10 +37,16 @@ class apiBddService {
         const validator = new formValidator();
 
         const {valid, errors} = validator.checkRegistration(login, email, password, confPassword);
+        const validationErrors = { ...errors };
+        const existingMember = await Repository.findByLogin(validator.sanitizeFields({login}));
 
-        if (!valid) {
-            throw new registrationException(errors);
+        if (!existingMember) {
+            validationErrors.login = "surname already used";
         }
+        if (Object.keys(validationErrors).length > 0 ) {
+            throw new registrationException(validationErrors);
+        }
+
         const newData = validator.sanitizeFields({ surname: login, email, password })
         newData.password = await passwordSecurity.hashPassword(newData.password);
 

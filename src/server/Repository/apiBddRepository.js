@@ -7,13 +7,8 @@ class apiBddRepository {
     }
 
     async findByLogin(login) {
-
         try {
-            const member = await Member.findOne(login);
-            if (!member) {
-                throw new loginException("Member not found");
-            }
-            return member;
+            return await Member.findOne(login);
         } catch (error) {
             throw error;
         }

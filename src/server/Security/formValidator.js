@@ -82,9 +82,16 @@ class formValidator {
         const isConfValid = this.passwordsConfirmation(password, confPassword);
 
         const valid = isNameValid && isEmailValid && isPasswordValid && isConfValid ;
-        const errors = this.results
 
-        return {valid, errors};
+        const errors = {};
+        for (const key of Object.keys(this.results)) {
+            const message = this.results[key];
+
+            if (message !== '') {
+                errors[key] = message;
+            }
+        }
+        return { valid, errors };
     }
 }
 
