@@ -91,7 +91,7 @@ class formValidator {
                 errors[key] = message;
             }
         }
-        return { valid, errors };
+        return errors;
     }
 }
 
