@@ -11,6 +11,17 @@ class apiBddController {
         }
     }
 
+    async checkUsername(req, res) {
+        try {
+            const login = req.body;
+            const surname = await service.findExistingUser(login);
+            res.status(200).send(surname);
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ error: "ServerError", message: "An unexpected error occurred" })
+        }
+    }
+
     async checkAuthentication(req, res) {
         try {
             const { login, password } = req.body;
@@ -34,6 +45,7 @@ class apiBddController {
             res.status(201).json(member);
         } catch (error) {
             if (error instanceof registrationException) {
+                console.log(error.errors)
                 res.status(400).send({ error: "ValidationError", details: error.errors })
             }
             else {

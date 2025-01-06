@@ -10,6 +10,15 @@ class apiBddService {
         return await Repository.findAll();
     }
 
+    async findExistingUser(login) {
+        const saneLogin = new formValidator().sanitizeField(login.login);
+        const member = await Repository.findByLogin(saneLogin)
+        if (member) {
+            return member.surname;
+        }
+        return null;
+    }
+
     async getMemberByLogin(login, password) {
         try {
             const saneFields = new formValidator().sanitizeFields({login, password});
@@ -32,21 +41,20 @@ class apiBddService {
     }
 
     async createMember(data) {
-        const { login, email, password, confPassword } = data;
+        const { surname, email, password, confirmation } = data;
         const validator = new formValidator();
 
-        const errors = validator.checkRegistration(login, email, password, confPassword);
-        const existingMember = await Repository.findByLogin(validator.sanitizeField(login));
-
+        const errors = validator.checkRegistration(surname, email, password, confirmation);
+        const existingMember = await Repository.findByLogin(validator.sanitizeField(surname));
         if (existingMember) {
-            errors.login = "surname already used";
+            errors.surname = "surname already used";
         }
 
         if (Object.keys(errors).length > 0 ) {
             throw new registrationException(errors);
         }
 
-        const newData = validator.sanitizeFields({ surname: login, email, password })
+        const newData = validator.sanitizeFields({ surname, email, password })
         newData.password = await passwordSecurity.hashPassword(newData.password);
 
         try {
