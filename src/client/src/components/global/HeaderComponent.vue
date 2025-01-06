@@ -1,6 +1,6 @@
 <script>
-  import ConnectedComponent from "@/components/ConnectedComponent.vue";
-  import RegistrationComponent from "@/components/RegistrationComponent.vue";
+  import ConnectedComponent from "@/components/headerNav/ConnectedComponent.vue";
+  import RegistrationComponent from "@/components/headerNav/RegistrationComponent.vue";
 
   export default {
     name: "HeaderComponent",
@@ -67,6 +67,10 @@
   align-self: center;
   text-decoration: none;
   font-weight: bold;
+  color: #e3e3e3;
+}
+
+.link:hover {
   color: white;
 }
 
