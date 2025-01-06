@@ -31,7 +31,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions['triggerAlert'],
+    ...mapActions(['triggerAlert']),
     async addMember() {
       try {
         const newMember = {
