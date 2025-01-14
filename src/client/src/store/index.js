@@ -8,6 +8,9 @@ const store = createStore({
                 type: '',
                 message: '',
                 visible: false,
+            },
+            defaultSearchManga: {
+                items: []
             }
         };
     },
@@ -24,6 +27,9 @@ const store = createStore({
             state.alert.message = '';
             state.alert.type = '';
             state.alert.visible = false;
+        },
+        setDefaultSearchManga(state, value) {
+            state.defaultSearchManga = value;
         }
     },
     actions: {
@@ -35,8 +41,11 @@ const store = createStore({
 
             setTimeout(() => {
                 commit('clearAlert');
-            }, 5000);
+            }, 1500);
         },
+        fetchDefaultSearchManga({ commit }, value) {
+            commit('setDefaultSearchManga', value);
+        }
     },
     getters: {
         isAuthenticated(state) {
@@ -44,6 +53,9 @@ const store = createStore({
         },
         alert(state) {
             return state.alert;
+        },
+        defaultSearchManga(state) {
+            return state.defaultSearchManga;
         }
     },
 });

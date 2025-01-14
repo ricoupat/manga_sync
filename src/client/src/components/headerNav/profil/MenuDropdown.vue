@@ -31,13 +31,10 @@ export default {
 
 <style scoped>
   .menu-dropdown {
-    position: absolute;
-    top: 100%;
     background-color: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     width: 200px;
-    z-index: 1000;
     animation: fadeIn 0.3s ease;
     list-style: none;
     padding: 15px 0;

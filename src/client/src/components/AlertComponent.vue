@@ -36,7 +36,7 @@ export default {
   top: 60px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 500;
   padding: 7px;
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);

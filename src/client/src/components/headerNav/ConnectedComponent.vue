@@ -28,7 +28,7 @@
   <div class="profile" >
     <div class="profile-wrapper"  @mouseleave="hideMenu">
       <router-link class="account" to="/Profile" @click="toggleMenu" @mouseenter="showMenu">Profile</router-link>
-      <MenuDropdown :isMenuVisible="isMenuVisible"/>
+      <MenuDropdown :isMenuVisible="isMenuVisible" class="menu"/>
     </div>
   </div>
 </template>
@@ -62,6 +62,11 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 15px 0;
+    padding: 20px 0;
+  }
+
+  .menu {
+    position: fixed;
+    top: 70px;
   }
 </style>

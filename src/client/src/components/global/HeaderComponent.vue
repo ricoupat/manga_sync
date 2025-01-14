@@ -36,6 +36,11 @@
 </template>
 
 <style scoped>
+.header-container {
+  position: fixed;
+  z-index: 9;
+}
+
 .navbar {
   display: flex;
   align-items: center;
