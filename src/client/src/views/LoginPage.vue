@@ -26,7 +26,7 @@ export default {
         if (response.status === 200 && response.data.isPasswordValid) {
           await this.triggerAlert({ message: "Connected", type: "success" });
           this.$store.dispatch('setAuthenticated', true);
-          this.$router.push({ path: "/" });
+          this.$router.replace({ path: "/" });
         }
       } catch (error) {
         if (error.status === 401) {

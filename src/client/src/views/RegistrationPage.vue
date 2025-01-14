@@ -49,7 +49,7 @@ export default {
         eventBus.$emit("memberAdded");
         this.$store.dispatch('setAuthenticated', true);
         await this.triggerAlert({message: "Welcome to Your Account!", type: "success"});
-        this.$router.push({ path: "/" });
+        this.$router.replace({ path: "/" });
       } catch (error) {
         if (error.response?.data?.details) {
           for (const [field, message] of Object.entries(error.response.data.details)) {
