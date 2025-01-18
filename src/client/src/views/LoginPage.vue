@@ -19,10 +19,11 @@ export default {
     ...mapActions(['triggerAlert']),
     async tryConnection() {
       try {
-        const response = await axios.post(`/api/members/login`, {
+        const response = await axios.post(`/api/auth/login`, {
           login: this.login,
           password: this.password,
         });
+
         if (response.status === 200 && response.data.isPasswordValid) {
           await this.triggerAlert({ message: "Connected", type: "success" });
           this.$store.dispatch('setAuthenticated', true);

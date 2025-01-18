@@ -1,5 +1,6 @@
 <script>
 import {mapActions} from "vuex";
+import axios from "axios";
 
 export default {
     name: "MenuDropdown",
@@ -12,9 +13,14 @@ export default {
     methods: {
       ...mapActions(['triggerAlert']),
       async disconnect() {
-        this.$store.dispatch('setAuthenticated', false);
-        await this.triggerAlert({ message: "Disconnected", type: "warning" });
-        this.$router.push({ path: "/" });
+        try {
+          const response = await axios.post('/api/auth/logout');
+          this.$store.dispatch('setAuthenticated', response.data.isLoggedIn);
+          await this.triggerAlert({ message: "Disconnected", type: "warning" });
+          this.$router.push({ path: "/" });
+        } catch (error) {
+          this.triggerAlert({message: 'Logout failed. Try again later', type: 'error'});
+        }
       }
     }
   }

@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import axios from "axios";
 
 const store = createStore({
     state() {
@@ -45,6 +46,14 @@ const store = createStore({
         },
         fetchDefaultSearchManga({ commit }, value) {
             commit('setDefaultSearchManga', value);
+        },
+        async checkAuth({ commit }) {
+            try {
+                await axios.post('/api/auth/check-auth', {}, { withCredentials: true })
+                commit('setAuthenticated', true);
+            } catch (error) {
+                commit('setAuthenticated', false);
+            }
         }
     },
     getters: {

@@ -5,23 +5,51 @@ import ProfilePage from '@/views/ProfilePage.vue'
 import AboutPage from "@/views/AboutPage.vue";
 import LoginPage from "@/views/LoginPage.vue";
 import SearchPage from "@/views/SearchPage.vue";
-
+import store from "@/store";
 
 const routes = [
     {
         path: '/',
         name: 'HomePage',
-        component: HomePage,
+        component: HomePage
     },
     {
         path: '/Registration',
         name: 'RegistrationPage',
-        component: RegistrationPage
+        component: RegistrationPage,
+        beforeEnter: async (to, from, next) => {
+            try {
+                await store.dispatch('checkAuth');
+
+                if (!store.getters.isAuthenticated) {
+                    next()
+                }
+                else {
+                    next(from.fullPath);
+                }
+            } catch (error) {
+                next()
+            }
+        }
     },
     {
         path: '/Login',
         name: 'LoginPage',
-        component: LoginPage
+        component: LoginPage,
+        beforeEnter: async (to, from, next) => {
+            try {
+                await store.dispatch('checkAuth');
+
+                if (!store.getters.isAuthenticated) {
+                    next()
+                }
+                else {
+                    next(from.fullPath);
+                }
+            } catch (error) {
+                next()
+            }
+        }
     },
     {
         path: '/About',
