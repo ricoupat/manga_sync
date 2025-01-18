@@ -1,20 +1,27 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 const mongoose = require('mongoose');
 const cors = require('cors');
 const apiBddRoutes = require('./routes/apiBddRoutes');
-const apiMangaRoute = require('./routes/apiMangaRoutes');
+const apiMangaRoutes = require('./routes/apiMangaRoutes');
+const apiAuthRoutes = require('./routes/apiAuthRoutes');
 require('dotenv').config();
+
 
 const PORT = process.env.PORT || 5050;
 const URL = process.env.MONGO_URI
 const app = express();
 const baseUrlBdd = '/members';
 const baseUrlManga = '/manga';
+const baseUrlAuth = '/auth';
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 app.use(baseUrlBdd, apiBddRoutes);
-app.use(baseUrlManga, apiMangaRoute);
+app.use(baseUrlManga, apiMangaRoutes);
+app.use(baseUrlAuth, apiAuthRoutes)
 
 mongoose
     .connect(URL, {

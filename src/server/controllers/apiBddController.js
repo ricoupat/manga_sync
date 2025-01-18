@@ -1,5 +1,6 @@
 const service = require('../services/apiBddService');
 const registrationException = require("../Exceptions/registrationException");
+const jwt = require("jsonwebtoken");
 
 class apiBddController {
     async getAllMembers(req, res) {
@@ -22,26 +23,16 @@ class apiBddController {
         }
     }
 
-    async checkAuthentication(req, res) {
-        try {
-            const { login, password } = req.body;
-            await service.getMemberByLogin(login, password);
-
-            res.status(200).send({ isPasswordValid: true });
-
-        } catch (error) {
-            if (error.name === "loginException") {
-                res.status(401).send(error.message)
-            }
-            else {
-                res.status(500).send({ error: "ServerError", message: "An unexpected error occurred" })
-            }
-        }
-    }
-
     async createMember(req, res) {
         try {
             const member = await service.createMember(req.body);
+            const token = jwt.sign({ id: member._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
+            res.cookie('authToken', token, {
+                httpOnly: true,
+                secure: true,
+                sameSite: 'Strict',
+                maxAge: 60 * 60 * 1000,
+            });
             res.status(201).json(member);
         } catch (error) {
             if (error instanceof registrationException) {
