@@ -16,6 +16,7 @@ const baseUrlBdd = '/members';
 const baseUrlManga = '/manga';
 const baseUrlAuth = '/auth';
 
+app.disable('x-powered-by');
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
